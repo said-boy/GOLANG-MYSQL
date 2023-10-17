@@ -20,6 +20,9 @@
 6. Eksekusi perintah SELECT SQL
     - gunakan QueryContext() untuk query yang mengembalikan hasil seperti Select.
 
+7. Tipe data column
+    - mengambil data dari database lalu memasukkan ke tipe data yang sudah dijabarkan. 
 
+    - jika kita membutuhkan tipe data date time sebenarnya kita bisa saja mengkonversinya ke string lalu ke date, tetapi itu akan capek. tambahkan saja parseTime=true pada koneksinya untuk mengkonversi secara otomatis untuk tipe datetime. 
 
 

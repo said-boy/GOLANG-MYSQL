@@ -7,7 +7,9 @@ import (
 
 // 4. Database pooling
 func GetConnection() *sql.DB {
-	db, err := sql.Open("mysql", "root:@tcp(localhost:3307)/golang_database")
+	// parseTime=true digunakan apabila kita memiliki data date time pada databasenya.
+	// parseTime ini akan secara otomatis mengkonversi ke tipe time.Time
+	db, err := sql.Open("mysql", "root:@tcp(localhost:3307)/golang_database?parseTime=true")
 	if err != nil {
 		panic(err)
 	}

@@ -2,8 +2,10 @@ package golang_mysql
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"testing"
+	"time"
 )
 
 // 5. Eksekusi perintah SQL
@@ -55,4 +57,46 @@ func TestSelectSql(t *testing.T) {
 
 }
 
+// 7. Tipe data column
+func TestSelectTipeData(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
 
+	ctx := context.Background()
+
+	// letak column pada query harus sama dengan letak pada rows.Scan()
+	query := "SELECT id, name, tgl_lahir, menikah, hobi FROM customer"
+	rows, err := db.QueryContext(ctx, query)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next(){
+		var id int
+		var name string
+		
+		// ketika kita membutuhkan data dengan tipe datetime 
+		// kita harus menambahkan parseTime=true pada koneksinya.
+		// maka tipe datetime akan secara otomatis dikonversi. 
+		var tgl_lahir time.Time
+		var menikah bool
+		var hobi sql.NullString // untuk column yang bisa null
+
+		err := rows.Scan(&id, &name, &tgl_lahir, &menikah, &hobi)
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("===========================")
+		fmt.Println("id : ", id)
+		fmt.Println("name : ", name)
+		fmt.Println("tgl_lahir : ", tgl_lahir)
+		fmt.Println("menikah : ", menikah)
+		fmt.Println("hobi : ", hobi)
+		fmt.Println("===========================")
+
+	}
+
+	defer rows.Close()
+
+}
