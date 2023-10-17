@@ -92,7 +92,9 @@ func TestSelectTipeData(t *testing.T) {
 		fmt.Println("name : ", name)
 		fmt.Println("tgl_lahir : ", tgl_lahir)
 		fmt.Println("menikah : ", menikah)
-		fmt.Println("hobi : ", hobi)
+		if hobi.Valid {
+			fmt.Println("hobi : ", hobi)
+		}
 		fmt.Println("===========================")
 
 	}
