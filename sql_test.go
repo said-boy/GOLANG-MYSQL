@@ -156,4 +156,42 @@ func TestPrepareStatement(t *testing.T) {
 
 }
 
+// 10. Transaction
+func TestTransacrion(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+	query := "INSERT INTO comment(email, comment) VALUES(?, ?)"
+	
+	tx, err := db.Begin()
+	if err != nil {
+		panic(err)
+	}
+
+	for i := 1; i < 10; i++ {
+		email := "said" + strconv.Itoa(i) + "@transaction.com"
+		comment := "Comment Transaction ke-" + strconv.Itoa(i)
+
+		result, err := tx.ExecContext(ctx, query, email, comment)
+		if err != nil {
+			panic(err)
+		}
+
+		insertId, err := result.LastInsertId()
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("Succes insert data id ", insertId)
+		
+	}
+
+	err = tx.Commit()
+	// err = tx.Rollback() // untuk rollback
+	if err != nil {
+		panic(err)
+	}
+}
+
 

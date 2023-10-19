@@ -31,3 +31,5 @@
 9. Prepare Statement
     - digunakan ketika kita membutuhkan esekusi query berkali kali dengan database koneksi yang sama dan dengan query yang sama, hanya berbeda parameternya.
 
+10. Transaction
+
