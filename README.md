@@ -25,4 +25,9 @@
 
     - jika kita membutuhkan tipe data date time sebenarnya kita bisa saja mengkonversinya ke string lalu ke date, tetapi itu akan capek. tambahkan saja parseTime=true pada koneksinya untuk mengkonversi secara otomatis untuk tipe datetime. 
 
+8. Auto Increment
+    - gunakan result pada query insert atau query yang tidak mengembalikan hasil, ini kan mengembalikan id yang ada pada tabel yang bersifat auto increment.
+
+9. Prepare Statement
+    - digunakan ketika kita membutuhkan esekusi query berkali kali dengan database koneksi yang sama dan dengan query yang sama, hanya berbeda parameternya.
 

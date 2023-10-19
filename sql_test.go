@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -81,6 +82,7 @@ func TestSelectTipeData(t *testing.T) {
 		var tgl_lahir time.Time
 		var menikah bool
 		var hobi sql.NullString // untuk column yang bisa null
+		/* sqlNull, dll akan mengembalikan 2 yaitu : String -> value dan Valid -> boolean */
 
 		err := rows.Scan(&id, &name, &tgl_lahir, &menikah, &hobi)
 		if err != nil {
@@ -102,3 +104,56 @@ func TestSelectTipeData(t *testing.T) {
 	defer rows.Close()
 
 }
+
+// 8. Auto Increment
+func TestGetAutoIncrement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+	query := "INSERT INTO customer(name, tgl_lahir, menikah, hobi) VALUES (?, ?, ?, ?) "
+	result, err := db.ExecContext(ctx, query, "budi", time.Now(), false, "membaca")
+	if err != nil {
+		panic(err)
+	}
+
+	insertId, err := result.LastInsertId()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Id data yang ditambahkan adalah ", insertId)
+
+}
+
+// 10. Prepare Statement
+func TestPrepareStatement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	query := "INSERT INTO comment(email, comment) VALUES(?, ?)"
+	stmt, err := db.PrepareContext(ctx, query)
+	if err != nil {
+		panic(err)
+	}
+
+	for i := 1; i <= 10; i++ {
+		email := "said" + strconv.Itoa(i) + "@gmail.com"
+		comment := "Halo, Ini comment ke " + strconv.Itoa(i)
+
+		result, err := stmt.ExecContext(ctx, email, comment)
+		if err != nil {
+			panic(err)
+		}
+
+		insertId, err := result.LastInsertId()
+		fmt.Println("Succes insert data id ", insertId)
+	}
+
+	defer stmt.Close()
+
+}
+
+
