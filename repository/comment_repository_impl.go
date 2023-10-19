@@ -3,7 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"golang-mysql/model"
+	"strconv"
 )
 
 type commentRepositoryImpl struct {
@@ -29,5 +31,26 @@ func (repo *commentRepositoryImpl) Insert(ctx context.Context, comment model.Com
 	comment.Id = int32(insertId)
 
 	return comment, nil
+
+}
+
+func (repo *commentRepositoryImpl) FindById(ctx context.Context, id int) (model.Comment, error) {
+	query := "SELECT id, email, comment FROM comment WHERE id = ? LIMIT 1"
+	rows, err := repo.DB.QueryContext(ctx, query, id)
+	comment := model.Comment{}
+	if err != nil {
+		return comment, err
+	}
+	defer rows.Close()
+
+	if rows.Next(){
+		// data nya ada
+		rows.Scan(&comment.Id, &comment.Email, &comment.Comment)
+		return comment, nil
+	}else{
+		// datanya tidak ada
+		return comment, errors.New("<404> Id " + strconv.Itoa(id) + " Not Found.")
+	}
+
 
 }
