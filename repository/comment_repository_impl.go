@@ -54,3 +54,21 @@ func (repo *commentRepositoryImpl) FindById(ctx context.Context, id int) (model.
 
 
 }
+
+func (repo *commentRepositoryImpl) FindAll(ctx context.Context) ([]model.Comment, error) {
+	query := "SELECT id, email, comment FROM comment"
+	rows, err := repo.DB.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var comments []model.Comment
+	for rows.Next() {
+		comment := model.Comment{}
+		rows.Scan(&comment.Id, &comment.Email, &comment.Comment)
+		comments = append(comments, comment)
+	}
+	return comments, nil
+	
+}

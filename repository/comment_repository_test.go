@@ -36,3 +36,14 @@ func TestFindById(t *testing.T) {
 
 	fmt.Println(result)
 }
+
+func TestFindAll(t *testing.T) {
+	comment := NewCommentRepository(golang_mysql.GetConnection())
+	comments, err := comment.FindAll(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	for _, comment := range comments {
+		fmt.Println(comment)
+	} 
+}
